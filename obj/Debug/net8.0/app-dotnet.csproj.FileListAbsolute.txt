@@ -240,3 +240,4 @@
 /Users/dave/developer/dotnet/app-dotnet/bin/Debug/net8.0/Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 /Users/dave/developer/dotnet/app-dotnet/bin/Debug/net8.0/Newtonsoft.Json.dll
 /Users/dave/developer/dotnet/app-dotnet/bin/Debug/net8.0/Newtonsoft.Json.Bson.dll
+/Users/dave/developer/dotnet/app-dotnet/obj/Debug/net8.0/app-dotnet.sourcelink.json
