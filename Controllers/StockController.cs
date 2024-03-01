@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using app_dotnet.Data;
 using app_dotnet.Dtos.Stock;
+using app_dotnet.Helpers;
 using app_dotnet.Interfaces;
 using app_dotnet.Mappers;
 using Microsoft.AspNetCore.Mvc;
@@ -27,13 +28,13 @@ namespace app_dotnet.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var stocks = await _stockRepo.GetAllAsync();
+            var stocks = await _stockRepo.GetAllAsync(query);
             var stocksDto = stocks.Select(s => s.ToStockDto());
             return Ok(stocksDto);
         }
