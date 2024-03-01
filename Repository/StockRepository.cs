@@ -41,23 +41,29 @@ namespace app_dotnet.Repository
 
         public async Task<List<Stock>> GetAllAsync(QueryObject query)
         {
+            // Query
             var stocks = _context.Stocks.Include(c => c.Comments).AsQueryable();
             if (!string.IsNullOrWhiteSpace(query.CompanyName))
             {
                 stocks = stocks.Where(s => s.CompanyName.Contains(query.CompanyName));
             }
-
             if (!string.IsNullOrWhiteSpace(query.Symbol))
             {
                 stocks = stocks.Where(s => s.Symbol.Contains(query.Symbol));
             }
-
+            // SortBy
             if (!string.IsNullOrWhiteSpace(query.SortBy))
             {
                if (query.SortBy.Equals("Symbol", StringComparison.OrdinalIgnoreCase))
                {
                  stocks = query.IsDecsending ?stocks.OrderByDescending(s => s.Symbol) :stocks.OrderBy(s => s.Symbol);
                }
+            }
+            // Pagination
+            if (query.pageNumber != 0 || query.pageSize != 0)
+            {
+                var skipNumber = (query.pageNumber -1) * query.pageSize;
+                return await stocks.Skip(skipNumber).Take(query.pageSize).ToListAsync();
             }
             return await stocks.ToListAsync();
         }

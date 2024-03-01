@@ -11,5 +11,7 @@ namespace app_dotnet.Helpers
         public string? CompanyName { get; set; } = null;
         public string? SortBy { get; set; } = null;
         public bool IsDecsending { get; set; } = false;
+        public int pageNumber { get; set; } = 0;
+        public int pageSize { get; set; } = 0;
     }
 }
