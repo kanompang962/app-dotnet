@@ -12,7 +12,7 @@ using app_dotnet.Data;
 namespace app_dotnet.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240229072157_init")]
+    [Migration("20240301062721_init")]
     partial class init
     {
         /// <inheritdoc />

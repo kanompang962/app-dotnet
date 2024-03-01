@@ -29,5 +29,13 @@ namespace app_dotnet.Mappers
                 StockId = stockId,
             };
         }
+        public static Comment ToCommentFromUpdate(this UpdateCommenRequesttDto commentDto)
+        {
+            return new Comment
+            {
+                Title = commentDto.Title,
+                Content = commentDto.Content,
+            };
+        }
     }
 }
