@@ -51,13 +51,13 @@ namespace app_dotnet.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "dec04276-a09c-4872-b123-529b78c77ea2",
+                            Id = "b5eba318-81ed-4176-a00a-672ea9f459dd",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "be6f18d7-271d-469d-9d52-f752d5535f19",
+                            Id = "7114efa4-2e08-4c4a-a9a3-071832bcb3f2",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -242,6 +242,9 @@ namespace app_dotnet.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -257,6 +260,8 @@ namespace app_dotnet.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
 
                     b.HasIndex("StockId");
 
@@ -365,9 +370,15 @@ namespace app_dotnet.Migrations
 
             modelBuilder.Entity("app_dotnet.Models.Comment", b =>
                 {
+                    b.HasOne("app_dotnet.Models.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId");
+
                     b.HasOne("app_dotnet.Models.Stock", "Stock")
                         .WithMany("Comments")
                         .HasForeignKey("StockId");
+
+                    b.Navigation("AppUser");
 
                     b.Navigation("Stock");
                 });

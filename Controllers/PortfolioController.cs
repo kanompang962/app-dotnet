@@ -72,13 +72,13 @@ namespace app_dotnet.Controllers
             var username = User.GetUsername();
             var appUser = await _userManager.FindByNameAsync(username);
 
-            var userPortfolio = await _portfolioRepo.GetUserPortfolio(appUser);
+            var userPortfolio = await _portfolioRepo.GetUserPortfolio(appUser!);
 
             var filteredStock = userPortfolio.Where(s => s.Symbol.ToLower() == symbol.ToLower()).ToList();
 
             if (filteredStock.Count() == 1)
             {
-                await _portfolioRepo.DeletePortfolio(appUser, symbol);
+                await _portfolioRepo.DeletePortfolio(appUser!, symbol);
             }
             else
             {
