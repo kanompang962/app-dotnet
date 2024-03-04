@@ -7,6 +7,7 @@ using app_dotnet.Interfaces;
 using app_dotnet.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace app_dotnet.Controllers
 {
@@ -15,13 +16,40 @@ namespace app_dotnet.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly ITokenService _tokenService;
-        public AccountController(UserManager<AppUser> userManager, ITokenService tokenService)
+        private readonly SignInManager<AppUser> _signinManager;
+        public AccountController(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager)
         {
             _userManager = userManager;
             _tokenService = tokenService;
+            _signinManager = signInManager;
         }
 
-        [HttpPost]
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == loginDto.Username!.ToLower());
+
+            if(user == null)
+                return Unauthorized("Invalid Username");
+
+            var result = await _signinManager.CheckPasswordSignInAsync(user, loginDto.Password!, false);
+
+            if(!result.Succeeded)
+                return Unauthorized("Password incorrect");
+            
+            return Ok(
+                new NewUserDto {
+                    Username = user.UserName,
+                    Email = user.Email,
+                    Token = _tokenService.CreateToken(user)
+                }
+            );
+        }
+
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
             try

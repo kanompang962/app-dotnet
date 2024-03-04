@@ -6,12 +6,14 @@ using app_dotnet.Data;
 using app_dotnet.Dtos.Comment;
 using app_dotnet.Interfaces;
 using app_dotnet.Mappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace app_dotnet.Controllers
 {
     [Route("api/comment")]
     [ApiController]
+    [Authorize]
     public class CommentController: ControllerBase
     {
         private readonly ICommentRepository _commentRepo;

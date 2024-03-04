@@ -8,6 +8,7 @@ using app_dotnet.Dtos.Stock;
 using app_dotnet.Helpers;
 using app_dotnet.Interfaces;
 using app_dotnet.Mappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -16,6 +17,7 @@ namespace app_dotnet.Controllers
 {
     [Route("api/stock")]
     [ApiController]
+    [Authorize]
     public class StockController : ControllerBase
     {
         private readonly ApplicationDBContext _context;
