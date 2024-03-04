@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using app_dotnet.Dtos.Account;
+using app_dotnet.Interfaces;
 using app_dotnet.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +14,11 @@ namespace app_dotnet.Controllers
     public class AccountController: ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
-        public AccountController(UserManager<AppUser> userManager)
+        private readonly ITokenService _tokenService;
+        public AccountController(UserManager<AppUser> userManager, ITokenService tokenService)
         {
             _userManager = userManager;
+            _tokenService = tokenService;
         }
 
         [HttpPost]
@@ -38,7 +41,13 @@ namespace app_dotnet.Controllers
                     var roleResult = await _userManager.AddToRoleAsync(appUser,"User");
                     if (roleResult.Succeeded)
                     {
-                        return Ok("Create User Success");
+                        return Ok(
+                            new NewUserDto {
+                                Username = appUser.UserName,
+                                Email = appUser.Email,
+                                Token = _tokenService.CreateToken(appUser)
+                            }
+                        );
                     } else {
                         return StatusCode(500, roleResult.Errors);
                     }
