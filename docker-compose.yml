@@ -1,4 +1,5 @@
-version: '3.8'
+
+version: '3.4'
 
 services:
   sql:
@@ -6,6 +7,7 @@ services:
     container_name: sql
     ports:
       - "1433:1433"
+    restart: unless-stopped
     volumes:
       - mssql_data:/var/opt/mssql
     environment:
@@ -13,6 +15,18 @@ services:
       MSSQL_SA_PASSWORD: "Def0931177457"
       MSSQL_PID: "Developer"
       MSSQL_USER: "SA"
+
+  appdotnet:
+    image: appdotnet
+    container_name: api
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 5042:5042
+    depends_on:
+      - sql
+
 volumes:
   mssql_data:
 # docker run -e "ACCEPT_EULA=1" -e "MSSQL_SA_PASSWORD=MyStrongPass123" -e "MSSQL_PID=Developer" -e "MSSQL_USER=SA" -p 1433:1433 -d --name=sql mcr.microsoft.com/azure-sql-edge
